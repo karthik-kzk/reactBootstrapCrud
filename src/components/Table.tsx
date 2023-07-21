@@ -1,26 +1,27 @@
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import DeleteModal from "./DeleteModel";
+import EditModal from "./EditModel";
 
-import MyVerticallyCenteredModal from "./bsModal";
+
+
 
 function Table(props: any) {
-
     const [select, setSelect] = useState();
     const [upDateIndex, setUpdateIndex] = useState(-1);
     const [update, setUpdate] = useState(false);
 
-    function handleDelete(e: any) {
-        // console.log(e.target.parentElement.id,"delete")
+    function handleDelete(e: any) {      
         setSelect(e.target.parentElement.id);
     }
     function handleEdit(e: any) {
-        console.log(e.target.parentElement.value, "edit")
+    
 
         e.target.parentElement.value && setUpdateIndex(e.target.parentElement.value);
         setTimeout(() => { setUpdate(true); }, 100)
     }
+    
     function handleEditClose(e: any) {
-        console.log(e, "ee")
+     
         setUpdateIndex(-1);
         setUpdate(false);
     }
@@ -54,10 +55,10 @@ function Table(props: any) {
                         return <tr key={i}>
                             <th scope="row">{i + 1}</th>
                             <td>{val.name}</td>
-                            <td>{val.dept}</td>
+                            <td>{val.department}</td>
                             <td>{val.email}</td>
                             <td>
-                                <button className="btn" style={{ padding: "3px" }} onClick={handleDelete} id={val.name} data-bs-toggle="modal" data-bs-target="#deleteModal">
+                                <button className="btn" style={{ padding: "3px" }} onClick={handleDelete} id={val.id} data-bs-toggle="modal" data-bs-target="#deleteModal">
                                     <i className="bi bi-trash-fill"  ></i>
                                 </button>
 
@@ -70,7 +71,7 @@ function Table(props: any) {
 
                                 </button>
 
-                                {update && <MyVerticallyCenteredModal show={update} onHide={handleEditClose} data={props.data[upDateIndex]} submit={handleEditSubmit} index={upDateIndex} />}
+                                {update && <EditModal show={update} onHide={handleEditClose} data={props.data[upDateIndex]} submit={handleEditSubmit} index={upDateIndex} />}
                                 <DeleteModal callback={callback} />
 
 

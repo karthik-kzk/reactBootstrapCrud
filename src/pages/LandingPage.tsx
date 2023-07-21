@@ -1,7 +1,7 @@
 
 
 import { useEffect, useState } from 'react';
-import Button from '../components/Button';
+import CreateModel from '../components/CreateModel';
 import DeleteModal from '../components/DeleteModel';
 import Navbar from '../components/Navbar';
 import Table from '../components/Table';
@@ -14,33 +14,32 @@ function LandingPage() {
     const [submit, setSubmit] = useState(true);
 
     function handleSubmit(value:boolean){
-        setSubmit(value&&!submit)
+     
+        setSubmit(!submit)
     }
-    function handleDelete(value:string){
-        let newData =data.filter((e:any)=>e.name!==value);
-        console.log(newData)
-       localStorage.setItem("data",JSON.stringify(newData)) 
+   async function handleDelete(value:number){
+        try {
+            const response = await axios.delete(`http://localhost:8080/student/${value}`);
+          } catch (error) {
+            console.error(error);
+          }
         setSubmit(!submit)
     }
     function handleEdit(value:boolean){
-        setSubmit(value&&!submit)
+        setSubmit(!submit)
     }
 
     async function getData() {
-        // try {
-        //   const response = await axios.get('https://jsonplaceholder.typicode.com/users');
-        // //   console.log(response.data);
-        //   setData(response.data);
+        try {
+          const response = await axios.get('http://localhost:8080/student');
+     
+          setData(response.data);
 
-        // } catch (error) {
-        //   console.error(error);
-        // }
+        } catch (error) {
+          console.error(error);
+        }
 
-        const data = JSON.parse(localStorage.getItem("data") || "")
-        console.log(data)
-        setData(data);
-
-    }
+        }
 
     useEffect(() => {
         getData();
@@ -50,7 +49,7 @@ function LandingPage() {
     }, [submit])
 
     return <>
-        <Navbar body={<><Button submit={handleSubmit}/>{data && <Table data={data} delete={handleDelete} edit={handleEdit}/>}
+        <Navbar body={<><CreateModel submit={handleSubmit}/>{data && <Table data={data} delete={handleDelete} edit={handleEdit}/>}
             <DeleteModal />
         </>} />
     </>
