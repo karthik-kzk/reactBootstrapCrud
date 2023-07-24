@@ -1,6 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { setIsLoggedIn } from "../store/actions";
+
 
 function LoginPage () {
+  const isLoggedIn = useSelector((state:any) => state.isLoggedIn);
+  const dispatch=useDispatch();
+
   const [inputs,setInputs]=useState({username:"",password:""});
   const [error, setError] = useState<any>({ username: true, password: true });
 
@@ -29,7 +36,9 @@ function LoginPage () {
   function handleSubmit(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
    alert(inputs.username+" "+inputs.password)
+   dispatch(setIsLoggedIn(!isLoggedIn)); 
   }
+  useEffect(() => {console.log(isLoggedIn);}, [isLoggedIn]);
   return (
     <div>
       <form className="w-25 mx-auto my-5">
@@ -59,13 +68,15 @@ function LoginPage () {
             onChange={handleChange}
           />
         </div>
-        <button
-          type="submit"
-          className="btn btn-secondary w-100  mt-3 btn-block"
-          onClick={handleSubmit}
-        >
-          Sign in
-        </button>
+        <Link to="/home">
+          <button
+            type="submit"
+            className="btn btn-secondary w-100  mt-3 btn-block"
+            onClick={handleSubmit}
+          >
+            Sign in
+          </button>
+        </Link>
       </form>
     </div>
   );
